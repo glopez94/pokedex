@@ -1,0 +1,27 @@
+# Ejecutable
+pokedex
+
+# Binarios compilados:
+
+*.exe
+*.out
+*.dll
+main
+# Directorios de dependencias (si usas vendoring):
+
+vendor/
+# Archivos de caché y temporales:
+
+*.test
+.cache/
+tmp/
+# Archivos de configuración sensibles:
+
+.env
+# Archivos de registro:
+
+*.log
+# Archivos específicos del sistema operativo:
+
+.DS_Store
+Thumbs.db
