@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"math/rand"
@@ -11,6 +10,7 @@ import (
 	"time"
 
 	"github.com/glopez94/pokedex/internal/pokecache"
+	"github.com/peterh/liner"
 )
 
 // Definir la estructura cliCommand
@@ -132,15 +132,30 @@ func main() {
 		Pokedex: make(map[string]Pokemon),
 	}
 
-	scanner := bufio.NewScanner(os.Stdin)
+	line := liner.NewLiner()
+	defer line.Close()
+
+	line.SetCtrlCAborts(true)
+	line.SetCompleter(func(line string) (c []string) {
+		for n := range commands {
+			if strings.HasPrefix(n, line) {
+				c = append(c, n)
+			}
+		}
+		return
+	})
 
 	for {
-		fmt.Print("Pokedex > ")
-		// Esperar la entrada del usuario
-		if !scanner.Scan() {
-			break
+		input, err := line.Prompt("Pokedex > ")
+		if err != nil {
+			if err == liner.ErrPromptAborted {
+				break
+			}
+			fmt.Println("Error reading line:", err)
+			continue
 		}
-		input := scanner.Text()
+
+		line.AppendHistory(input)
 		words := cleanInput(input)
 		// Verificar si hay al menos una palabra en la entrada
 		if len(words) > 0 {
